@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup | REIGN</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Signup</h2>
+    <input type="email" id="signup-email" placeholder="Email" />
+    <input type="password" id="signup-password" placeholder="Password" />
+    <button id="signup-btn">Sign Up</button>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </div>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="auth.js"></script>
+
+  <footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-section subscribe">
+      <h3>Subscribe to Our Newsletter</h3>
+      <input type="email" placeholder="Enter your email" id="footer-email" />
+      <button onclick="subscribeEmail()">Subscribe</button>
+    </div>
+
+    <div class="footer-section links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#">Contact Information</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="footer-bottom">© 2025 SlickFunky. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

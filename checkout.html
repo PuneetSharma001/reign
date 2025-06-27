@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout | REIGN</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="checkout-container">
+    <h2>Payment</h2>
+    <p>Total Amount: ₹<span id="total-amount">0</span></p>
+    <input type="text" placeholder="Card Number" required />
+    <input type="text" placeholder="Name on Card" required />
+    <button onclick="completePayment()">Pay Now</button>
+  </div>
+  <script>
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const total = cart.reduce((sum, item) => sum + parseInt(item.price), 0);
+    document.getElementById("total-amount").textContent = total;
+
+    function completePayment() {
+      alert("Payment successful! Thank you for shopping.");
+      localStorage.removeItem("cart");
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-section subscribe">
+      <h3>Subscribe to Our Newsletter</h3>
+      <input type="email" placeholder="Enter your email" id="footer-email" />
+      <button onclick="subscribeEmail()">Subscribe</button>
+    </div>
+
+    <div class="footer-section links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#">Contact Information</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="footer-bottom">© 2025 SlickFunky. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

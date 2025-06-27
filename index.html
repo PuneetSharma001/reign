@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>REIGN</title>
+
+  <!-- CSS & Fonts -->
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+<body>
+  <header>
+    <div class="logo">REIGN</div>
+    <nav>
+      <div class="menu-icon" onclick="toggleMenu()">☰</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="cart.html">Cart 🛒 <span id="cart-count">0</span></a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="signup.html">Signup</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero" data-aos="fade-up">
+    <h1>Fresh & Funky Streetwear</h1>
+    <p>Style that speaks your vibe.</p>
+    <button id="shopBtn">Shop Now</button>
+  </section>
+
+  <section class="carousel" data-aos="zoom-in-up">
+    <h2>Trending Now</h2>
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="assets/product1.jpg" alt="1"></div>
+        <div class="swiper-slide"><img src="assets/product2.jpg" alt="2"></div>
+        <div class="swiper-slide"><img src="assets/product1.jpg" alt="3"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="products" data-aos="fade-up">
+    <h2>Featured Products</h2>
+
+    <label for="category-filter">Filter by Category:</label>
+    <select id="category-filter">
+      <option value="all">All</option>
+      <option value="tshirt">T-Shirts</option>
+      <option value="hoodie">Hoodies</option>
+    </select>
+
+    <div class="product-grid" id="product-grid">
+      <div class="product-card" data-category="tshirt">
+        <img src="assets/product1.jpg" alt="Product 1" />
+        <h3>REIGN BLACK TEE</h3>
+        <p>₹999</p>
+        <button class="add-cart" data-id="1" data-name="REIGN BLACK TEE" data-price="999" data-img="assets/product1.jpg">Add to Cart</button>
+      </div>
+
+      <div class="product-card" data-category="hoodie">
+        <img src="assets/product2.jpg" alt="Product 2" />
+        <h3>REIGN GREEN TEE</h3>
+        <p>₹1499</p>
+        <button class="add-cart" data-id="2" data-name="REIGN GREEN TEE" data-price="1499" data-img="assets/product2.jpg">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!--<footer data-aos="fade-in">
+    <p>© 2025 REIGN. All rights reserved.</p>
+  </footer>-->
+
+  <!-- JS Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+  <script src="script.js"></script>
+
+
+  <!--About-->
+  <section class="about-us" id="about">
+  <div class="about-container">
+    <div class="about-image">
+      <img src="assets/about.jpg" alt="About REIGN">
+    </div>
+    <div class="about-text">
+      <h2>What We’re About</h2>
+      <p>
+        REIGN is more than just a fashion brand — it's a movement. We blend streetwear style with bold expression to create outfits that speak confidence.
+      </p>
+      <p>
+        From limited-edition drops to everyday essentials, every piece is crafted to let you own your vibe. REIGN empowers youth culture by celebrating authenticity, creativity, and rebellion — one look at a time.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+  <!--FOOTER-->
+  <footer class="site-footer">
+  <div class="footer-content">
+    <div class="footer-section subscribe">
+      <h3>Subscribe to Our emails</h3>
+      <input type="email" placeholder="Enter your email" id="footer-email" />
+      <button onclick="subscribeEmail()">Subscribe</button>
+    </div>
+
+    <div class="footer-section links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="#">Contact Information</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Refund Policy</a></li>
+        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+
+    <div class="social-icons">
+    <a href="https://instagram.com/yourhandle" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://facebook.com/yourpage" target="_blank"><i class="fab fa-facebook"></i></a>
+    <a href="https://twitter.com/yourhandle" target="_blank"><i class="fab fa-twitter"></i></a>
+    <a href="mailto:contact@reign.com"><i class="fas fa-envelope"></i></a>
+    </div>
+
+  <p class="footer-bottom">© 2025 REIGN. All rights reserved.</p>
+</footer>
+
+<!-- Floating Chat Button -->
+<div class="chat-button" onclick="toggleChat()">
+  💬
+</div>
+
+<div class="chat-popup" id="chat-popup">
+  <div class="chat-header">
+    <span>Live Chat</span>
+    <button onclick="toggleChat()">✖</button>
+  </div>
+  <div class="chat-body">
+    <p>👋 Hi there! How can we help you?</p>
+    <input type="text" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+
+</body>
+</html>
