@@ -11,35 +11,88 @@ body {
   line-height: 1.6;
 }
 
-/* Header */
-header {
-  background: #111;
-  color: #fff;
+/* Header/Navbar */
+nav.navbar {
   display: flex;
   justify-content: space-between;
-  padding: 1rem 2rem;
   align-items: center;
+  background: #111;
+  padding: 1rem 2rem;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
-.logo {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-nav ul {
-  list-style: none;
+
+.nav-left ul {
   display: flex;
+  list-style: none;
   gap: 1.5rem;
 }
-nav a {
-  color: white;
+.nav-left ul li a {
+  color: #fff;
   text-decoration: none;
-  transition: color 0.3s ease;
 }
-nav a:hover {
+.nav-left ul li a:hover {
   color: #ff4081;
 }
+
+.nav-center .logo a {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-bar input {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+.nav-right i {
+  font-size: 18px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #222;
+  border-radius: 5px;
+  min-width: 120px;
+  z-index: 999;
+}
+
+.dropdown-content a {
+  color: #fff;
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+}
+.dropdown-content a:hover {
+  background-color: #333;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 
 /* Hero Section */
 .hero {
@@ -107,6 +160,20 @@ nav a:hover {
   transition: transform 0.3s ease;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-card img {
+  width: 100%;           /* was 50% — change to 100% to use full width */
+  max-height: 180px;     /* restrict height to avoid large images */
+  object-fit: contain;   /* keeps image aspect ratio */
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
 .product-card:hover {
   transform: scale(1.03);
 }
@@ -414,4 +481,59 @@ footer {
 
 .menu-icon {
   display: none; /* This hides it by default */
+}
+
+/*quicklinks*/
+
+.policy-page {
+  max-width: 800px;
+  margin: 80px auto;
+  padding: 30px 20px;
+  background-color: white;
+  color: black;
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.7;
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
+
+.policy-page h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: black;
+}
+
+.policy-page p {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.policy-page a {
+  color: blue;
+  text-decoration: underline;
+}
+
+
+/*shop button*/
+html {
+  scroll-behavior: smooth;
+}
+
+.shop-btn {
+  padding: 12px 25px;
+  background-color: #ff4747;
+  color: white;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 20px;
+  transition: background 0.3s ease;
+}
+
+.shop-btn:hover {
+  background-color: black;
 }

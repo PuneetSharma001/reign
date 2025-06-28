@@ -5,71 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Cart - REIGN</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <div class="logo">REIGN</div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="#">Cart 🛒</a></li>
-      </ul>
+    <nav class="navbar">
+      <div class="nav-left">
+        <ul><li><a href="index.html">Home</a></li></ul>
+      </div>
+      <div class="nav-center">
+        <div class="logo"><a href="index.html">REIGN</a></div>
+      </div>
+      <div class="nav-right">
+        <form class="search-bar"><input type="text" placeholder="What are you looking for?" /></form>
+        <a href="wishlist.html" title="Wishlist"><i class="fas fa-heart"></i></a>
+        <a href="cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+        <div class="dropdown">
+          <i class="fas fa-user" onclick="toggleDropdown()"></i>
+          <div class="dropdown-content" id="loginDropdown">
+            <a href="login.html">Login</a>
+            <a href="signup.html">Signup</a>
+          </div>
+        </div>
+      </div>
     </nav>
   </header>
 
+  <!-- Cart Section -->
   <section class="products">
     <h2>Your Cart</h2>
-    <div class="product-grid" id="cart-grid">
-      <!-- Cart items will appear here -->
-    </div>
+    <div id="cart-grid" class="product-grid"></div>
+    <div id="cart-summary" style="text-align:center; margin-top:20px;"></div>
   </section>
 
-  <footer>
-    <p>© 2025 REIGN. All rights reserved.</p>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-section subscribe">
+        <h3>Subscribe to Our Newsletter</h3>
+        <input type="email" placeholder="Enter your email" id="footer-email" />
+        <button onclick="subscribeEmail()">Subscribe</button>
+      </div>
+      <div class="footer-section links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="contact.html">Contact Information</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="refund.html">Refund Policy</a></li>
+          <li><a href="shipping.html">Shipping Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-bottom">© 2025 REIGN. All rights reserved.</p>
   </footer>
 
+  <!-- Cart Script -->
   <script>
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const grid = document.getElementById("cart-grid");
+    const summary = document.getElementById("cart-summary");
 
-    if (cart.length === 0) {
-      grid.innerHTML = "<p>No items in cart.</p>";
-    } else {
-      cart.forEach(item => {
-        const div = document.createElement("div");
-        div.classList.add("product-card");
-        div.innerHTML = `
+    function renderCart() {
+      grid.innerHTML = "";
+      summary.innerHTML = "";
+
+      if (cart.length === 0) {
+        grid.innerHTML = "<p>Your cart is empty. Please <a href='login.html'>Login</a> to add items.</p>";
+        return;
+      }
+
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += parseFloat(item.price);
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+        card.innerHTML = `
           <img src="${item.img}" alt="${item.name}">
           <h3>${item.name}</h3>
           <p>₹${item.price}</p>
+          <button onclick="removeFromCart(${index})" style="background:red; color:white; margin-top:10px;">Remove</button>
         `;
-        grid.appendChild(div);
+        grid.appendChild(card);
       });
+
+      summary.innerHTML = `
+        <h3>Total: ₹${total}</h3>
+        <button onclick="buyNow()" style="padding:10px 20px; background:green; color:white; border:none; border-radius:5px;">Buy Now</button>
+      `;
     }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function buyNow() {
+      alert("Thank you for your purchase!");
+      localStorage.removeItem("cart");
+      renderCart();
+    }
+
+    renderCart();
   </script>
-
-  <footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-section subscribe">
-      <h3>Subscribe to Our Newsletter</h3>
-      <input type="email" placeholder="Enter your email" id="footer-email" />
-      <button onclick="subscribeEmail()">Subscribe</button>
-    </div>
-
-    <div class="footer-section links">
-      <h3>Quick Links</h3>
-      <ul>
-        <li><a href="#">Contact Information</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Refund Policy</a></li>
-        <li><a href="#">Shipping Policy</a></li>
-        <li><a href="#">Terms of Service</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <p class="footer-bottom">© 2025 SlickFunky. All rights reserved.</p>
-</footer>
-
 </body>
 </html>

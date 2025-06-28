@@ -10,6 +10,20 @@ const swiper = new Swiper(".mySwiper", {
   },
 });
 
+//navbar
+function toggleDropdown() {
+  const dropdown = document.getElementById("loginDropdown");
+  dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+}
+
+  function toggleMenu() {
+    const nav = document.querySelector('nav');
+    nav.classList.toggle('active');
+  }
+
+
+
+
 // Cart logic
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
@@ -36,7 +50,76 @@ document.querySelectorAll(".add-cart").forEach(button => {
   });
 });
 
-// Filter Logic
+// Example product object when adding to cart
+// Display Cart Items
+const cartGrid = document.getElementById("product-grid") || document.getElementById("cart-grid");
+if (cartGrid && window.location.href.includes("cart.html")) {
+  cartGrid.innerHTML = "";
+  if (cart.length === 0) {
+    cartGrid.innerHTML = "<p>Your cart is empty. Please add items to cart.</p>";
+  } else {
+    cart.forEach((item, index) => {
+      const div = document.createElement("div");
+      div.classList.add("product-card");
+      div.innerHTML = `
+        <img src="${item.img}" alt="${item.name}">
+        <h3>${item.name}</h3>
+        <p>₹${item.price}</p>
+        <button onclick="buyNow('${item.name}')">Buy Now</button>
+        <button onclick="removeFromCart(${index})">Remove</button>
+      `;
+      cartGrid.appendChild(div);
+    });
+  }
+}
+
+// Buy Now function
+function buyNow(name) {
+  alert(`Proceeding to buy: ${name}`);
+  // Redirect to checkout if needed
+}
+
+// Remove from Cart
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  location.reload(); // Refresh cart page
+}
+
+
+
+// ======================= WISHLIST =======================
+document.addEventListener('DOMContentLoaded', () => {
+  updateWishlistCount();
+});
+
+document.querySelectorAll('.add-wishlist').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = {
+      id: btn.dataset.id,
+      name: btn.dataset.name,
+      price: btn.dataset.price,
+      img: btn.dataset.img,
+    };
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    if (!wishlist.find(i => i.id === item.id)) {
+      wishlist.push(item);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      alert("Added to Wishlist!");
+      updateWishlistCount();
+    } else {
+      alert("Already in Wishlist!");
+    }
+  });
+});
+
+function updateWishlistCount() {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  const icon = document.getElementById("wishlist-count");
+  if (icon) icon.textContent = wishlist.length;
+}
+
+// ======================= FILTER =======================
 const categoryFilter = document.getElementById("category-filter");
 if (categoryFilter) {
   categoryFilter.addEventListener("change", () => {
@@ -51,6 +134,7 @@ if (categoryFilter) {
   });
 }
 
+// ======================= SUBSCRIBE =======================
 function subscribeEmail() {
   const emailInput = document.getElementById("footer-email");
   const email = emailInput.value;
@@ -62,10 +146,12 @@ function subscribeEmail() {
   }
 }
 
-
+// ======================= CHAT BOT =======================
 function toggleChat() {
   const popup = document.getElementById("chat-popup");
-  popup.style.display = popup.style.display === "block" ? "none" : "block";
+  if (popup) {
+    popup.style.display = popup.style.display === "block" ? "none" : "block";
+  }
 }
 
 function sendMessage() {
@@ -77,10 +163,4 @@ function sendMessage() {
   } else {
     alert("Please enter a message.");
   }
-}
-
-
-function toggleMenu() {
-  const nav = document.querySelector("nav");
-  nav.classList.toggle("active");
 }

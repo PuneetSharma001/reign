@@ -17,37 +17,50 @@
 </head>
 <body>
   <header>
-    <div class="logo">REIGN</div>
-    <nav>
-      <div class="menu-icon" onclick="toggleMenu()">☰</div>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="cart.html">Cart 🛒 <span id="cart-count">0</span></a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="signup.html">Signup</a></li>
-      </ul>
-    </nav>
+      <nav class="navbar">
+        <div class="nav-left">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+        </div>
+
+        <div class="nav-center">
+          <div class="logo"><a href="index.html">REIGN</a></div>
+        </div>
+
+        <div class="nav-right">
+          <form class="search-bar">
+            <input type="text" placeholder="What are you looking for?" />
+          </form>
+          <a href="wishlist.html" title="Wishlist"><i class="fas fa-heart"></i></a>
+          <a href="cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+          <a href="login.html" title="login"><i class="fas fa-user"></i></a>
+          </div>
+        </div>
+      </nav>
+
   </header>
 
   <section class="hero" data-aos="fade-up">
     <h1>Fresh & Funky Streetwear</h1>
     <p>Style that speaks your vibe.</p>
-    <button id="shopBtn">Shop Now</button>
+    <a href="#products" class="shop-btn">Shop Now</a>
+
   </section>
 
   <section class="carousel" data-aos="zoom-in-up">
     <h2>Trending Now</h2>
     <div class="swiper mySwiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"><img src="assets/product1.jpg" alt="1"></div>
-        <div class="swiper-slide"><img src="assets/product2.jpg" alt="2"></div>
-        <div class="swiper-slide"><img src="assets/product1.jpg" alt="3"></div>
+        <div class="swiper-slide"><img src="assets/product1.jpeg" alt="1"></div>
+        <div class="swiper-slide"><img src="assets/product2.jpeg" alt="2"></div>
+        <div class="swiper-slide"><img src="assets/product3.jpeg" alt="3"></div>
       </div>
     </div>
   </section>
 
-  <section class="products" data-aos="fade-up">
+  <section class="products" id="products" data-aos="fade-up">
     <h2>Featured Products</h2>
 
     <label for="category-filter">Filter by Category:</label>
@@ -58,18 +71,32 @@
     </select>
 
     <div class="product-grid" id="product-grid">
+
       <div class="product-card" data-category="tshirt">
-        <img src="assets/product1.jpg" alt="Product 1" />
+        <img src="assets/product1.jpeg" alt="Product 1" />
         <h3>REIGN BLACK TEE</h3>
         <p>₹999</p>
-        <button class="add-cart" data-id="1" data-name="REIGN BLACK TEE" data-price="999" data-img="assets/product1.jpg">Add to Cart</button>
+        <button class="add-cart" data-id="1" data-name="REIGN OVERSIZE BLACK TEE" data-price="999" data-img="assets/product1.jpg">Add to Cart</button>
+        <button class="add-wishlist" data-id="1" data-name="REIGN OVERSIZE BLACK TEE" data-price="999" data-img="assets/product1.jpg"><i class="fa fa-heart"></i></button>
+
       </div>
 
       <div class="product-card" data-category="hoodie">
-        <img src="assets/product2.jpg" alt="Product 2" />
+        <img src="assets/product2.jpeg" alt="Product 2" />
         <h3>REIGN GREEN TEE</h3>
         <p>₹1499</p>
-        <button class="add-cart" data-id="2" data-name="REIGN GREEN TEE" data-price="1499" data-img="assets/product2.jpg">Add to Cart</button>
+        <button class="add-cart" data-id="2" data-name="REIGN OVERSIZE BEIGE TEE" data-price="1499" data-img="assets/product2.jpg">Add to Cart</button>
+        <button class="add-wishlist" data-id="2" data-name="REIGN OVERSIZE BEIGE TEE" data-price="1499" data-img="assets/product1.jpg"><i class="fa fa-heart"></i></button>
+
+      </div>
+
+      <div class="product-card" data-category="tshirt">
+        <img src="assets/product3.jpeg" alt="Product 3" />
+        <h3>REIGN BLACK TEE</h3>
+        <p>₹999</p>
+        <button class="add-cart" data-id="3" data-name="REIGN OVERSIZE BLACK TEE" data-price="999" data-img="assets/product3.jpg">Add to Cart</button>
+        <button class="add-wishlist" data-id="3" data-name="REIGN OVERSIZE BLACK TEE" data-price="999" data-img="assets/product3.jpg"><i class="fa fa-heart"></i></button>
+
       </div>
     </div>
   </section>
@@ -116,11 +143,12 @@
     <div class="footer-section links">
       <h3>Quick Links</h3>
       <ul>
-        <li><a href="#">Contact Information</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Refund Policy</a></li>
-        <li><a href="#">Shipping Policy</a></li>
-        <li><a href="#">Terms of Service</a></li>
+        <li><a href="contact.html">Contact Information</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="refund.html">Refund Policy</a></li>
+        <li><a href="shipping.html">Shipping Policy</a></li>
+        <li><a href="terms.html">Terms of Service</a></li>
+
       </ul>
     </div>
   </div>
@@ -133,25 +161,23 @@
     </div>
 
   <p class="footer-bottom">© 2025 REIGN. All rights reserved.</p>
-</footer>
+  </footer>
 
-<!-- Floating Chat Button -->
-<div class="chat-button" onclick="toggleChat()">
-  💬
-</div>
-
-<div class="chat-popup" id="chat-popup">
-  <div class="chat-header">
-    <span>Live Chat</span>
-    <button onclick="toggleChat()">✖</button>
+  <!-- Floating Chat Button -->
+  <div class="chat-button" onclick="toggleChat()">
+    💬
   </div>
-  <div class="chat-body">
-    <p>👋 Hi there! How can we help you?</p>
-    <input type="text" placeholder="Type your message..." />
-    <button onclick="sendMessage()">Send</button>
+
+  <div class="chat-popup" id="chat-popup">
+    <div class="chat-header">
+      <span>Live Chat</span>
+      <button onclick="toggleChat()">✖</button>
+    </div>
+    <div class="chat-body">
+      <p>👋 Hi there! How can we help you?</p>
+      <input type="text" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
   </div>
-</div>
-
-
 </body>
 </html>
