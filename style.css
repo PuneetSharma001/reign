@@ -340,17 +340,25 @@ footer {
   }
 }
 
-/*mobile style*/
+/* Show hamburger icon on mobile */
 .menu-icon {
   display: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
 }
 
+/* Mobile View Fix */
 @media (max-width: 768px) {
   .nav-left ul {
     display: none;
     flex-direction: column;
     background: #111;
     width: 100%;
+    position: absolute;
+    top: 60px; /* adjust based on navbar height */
+    left: 0;
+    z-index: 999;
     padding: 1rem;
   }
 
@@ -363,7 +371,6 @@ footer {
   }
 
   .nav-right {
-    flex-direction: row;
     gap: 10px;
   }
 
@@ -373,6 +380,7 @@ footer {
     transform: translateX(-50%);
   }
 }
+
 
 
 /* chat*/
