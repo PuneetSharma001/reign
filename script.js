@@ -76,7 +76,6 @@ document.querySelectorAll(".add-cart").forEach(button => {
 
 // Example product object when adding to cart
 // Display Cart Items
-const cartGrid = document.getElementById("product-grid") || document.getElementById("cart-grid");
 if (cartGrid && window.location.href.includes("cart.html")) {
   cartGrid.innerHTML = "";
   if (cart.length === 0) {
@@ -86,7 +85,9 @@ if (cartGrid && window.location.href.includes("cart.html")) {
       const div = document.createElement("div");
       div.classList.add("product-card");
       div.innerHTML = `
-        <img src="${item.img}" alt="${item.name}">
+        <a href="${item.img}" target="_blank">
+          <img src="${item.img}" alt="${item.name}" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;">
+        </a>
         <h3>${item.name}</h3>
         <p>₹${item.price}</p>
         <button onclick="buyNow('${item.name}')">Buy Now</button>
@@ -96,6 +97,7 @@ if (cartGrid && window.location.href.includes("cart.html")) {
     });
   }
 }
+
 
 // Buy Now function
 function buyNow(name) {

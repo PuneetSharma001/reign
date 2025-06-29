@@ -642,30 +642,42 @@ html {
 @media (max-width: 768px) {
   .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: nowrap;
+    padding: 0.8rem 1rem;
   }
 
   .menu-toggle {
+    display: block;
     font-size: 1.5rem;
     color: white;
     cursor: pointer;
+    
   }
 
   .logo {
     flex: 1;
     text-align: center;
+    margin: 0;
   }
 
   .nav-icons {
     display: flex;
-    gap: 10px;
     align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
   }
 
   .search-input {
     display: none;
+    width: 100px;
+  }
+
+  .nav-icons.show-search .search-input {
+    display: inline-block;
   }
 
   .wishlist-icon {
@@ -706,12 +718,31 @@ html {
   .navbar.show-menu .nav-links {
     display: flex;
   }
+}
 
+/*nav bar align perfect*/
+@media (max-width: 768px) {
   .nav-icons {
-    flex-wrap: nowrap;
-    justify-content: center;
-    width: 100%;
+    margin-left: auto;  /* push icons to far right */
+    margin-right: 0;    /* ensure no right gap */
+    gap: 10px;
+    padding: 0;
+  }
+
+  .search-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-input {
+    display: none;
+    width: 100px;
+  }
+
+  .nav-icons.show-search .search-input {
+    display: inline-block;
   }
 }
+
 
 
