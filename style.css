@@ -340,44 +340,63 @@ footer {
   }
 }
 
-/* Show hamburger icon on mobile */
 .menu-icon {
   display: none;
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
 }
 
-/* Mobile View Fix */
+/* RESPONSIVE NAVBAR */
 @media (max-width: 768px) {
+  nav.navbar {
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .menu-icon {
+    display: block;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    margin-right: auto;
+  }
+
   .nav-left ul {
     display: none;
     flex-direction: column;
     background: #111;
     width: 100%;
     position: absolute;
-    top: 60px; /* adjust based on navbar height */
+    top: 60px;
     left: 0;
     z-index: 999;
-    padding: 1rem;
+    padding: 1rem 0;
+    text-align: center;
   }
 
   nav.active .nav-left ul {
     display: flex;
   }
 
-  .menu-icon {
-    display: block;
+  .nav-center {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
   }
 
   .nav-right {
+    width: 100%;
+    justify-content: center;
     gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
   }
 
-  .nav-center {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  .search-bar {
+    width: 90%;
+    margin: auto;
+  }
+
+  .search-bar input {
+    width: 100%;
   }
 }
 
