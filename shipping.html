@@ -10,30 +10,29 @@
 
   <header>
     <nav class="navbar">
-        <div class="nav-left">
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            
-          </ul>
+        <!-- Hamburger (only on mobile) -->
+        <div class="menu-toggle" onclick="toggleMenu()">
+          <i class="fas fa-bars"></i>
         </div>
 
-        <div class="nav-center">
-          <div class="logo"><a href="index.html">REIGN</a></div>
+        <!-- Left menu links -->
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+        </ul>
+
+        <!-- Center logo -->
+        <div class="nav-logo">
+          <a href="index.html">REIGN</a>
         </div>
 
-        <div class="nav-right">
+        <!-- Right icons -->
+        <div class="nav-icons">
           <form class="search-bar">
-            <input type="text" placeholder="What are you looking for?" />
+            <input type="text" placeholder="Search..." />
           </form>
-          <a href="#" title="Wishlist"><i class="fas fa-heart"></i></a>
+          <a href="wishlist.html" title="Wishlist"><i class="fas fa-heart"></i></a>
           <a href="cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
-          <div class="dropdown">
-            <i class="fas fa-user" onclick="toggleDropdown()"></i>
-            <div class="dropdown-content" id="loginDropdown">
-              <a href="login.html">Login</a>
-              <a href="signup.html">Signup</a>
-            </div>
-          </div>
+          <a href="login.html" title="Login"><i class="fas fa-user"></i></a>
         </div>
       </nav>
   </header>

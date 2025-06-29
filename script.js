@@ -17,9 +17,33 @@ function toggleDropdown() {
 }
 
   function toggleMenu() {
-    const nav = document.querySelector("nav");
-    nav.classList.toggle("active");
+  const nav = document.querySelector("nav");
+  nav.classList.toggle("active");
+}
+
+function toggleSearch() {
+  const search = document.getElementById("mobile-search");
+  if (search.style.display === "block") {
+    search.style.display = "none";
+  } else {
+    search.style.display = "block";
   }
+}
+
+
+  function toggleSearch() {
+  const wrapper = document.querySelector(".search-wrapper");
+  wrapper.classList.toggle("active");
+}
+
+// Hide search input when clicking outside
+document.addEventListener("click", function (event) {
+  const searchWrapper = document.querySelector(".search-wrapper");
+  if (!searchWrapper.contains(event.target)) {
+    searchWrapper.classList.remove("active");
+  }
+});
+
 
 
 
@@ -164,3 +188,52 @@ function sendMessage() {
     alert("Please enter a message.");
   }
 }
+
+
+// Mobile menu toggle
+document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navbar = document.querySelector('.navbar');
+  menuToggle?.addEventListener('click', () => {
+    navbar.classList.toggle('active');
+  });
+});
+
+
+function toggleMenu() {
+  document.querySelector('.navbar').classList.toggle('active');
+}
+
+
+
+
+
+function toggleMenu() {
+  const nav = document.querySelector(".navbar");
+  nav.classList.toggle("active");
+}
+
+function toggleSearch() {
+  const wrapper = document.querySelector(".search-wrapper");
+  wrapper.classList.toggle("active");
+}
+
+// Optional: close search input when clicking outside
+document.addEventListener("click", function (e) {
+  const wrapper = document.querySelector(".search-wrapper");
+  if (!wrapper.contains(e.target)) {
+    wrapper.classList.remove("active");
+  }
+});
+
+function toggleMenu() {
+  const menu = document.getElementById("mobileMenu");
+  menu.classList.toggle("show");
+}
+
+function toggleMenu() {
+  const navbar = document.querySelector(".navbar");
+  navbar.classList.toggle("show-menu");
+}
+
+

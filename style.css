@@ -11,89 +11,6 @@ body {
   line-height: 1.6;
 }
 
-/* Header/Navbar */
-nav.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #111;
-  padding: 1rem 2rem;
-  color: #fff;
-  font-family: 'Poppins', sans-serif;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.nav-left ul {
-  display: flex;
-  list-style: none;
-  gap: 1.5rem;
-}
-.nav-left ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-.nav-left ul li a:hover {
-  color: #ff4081;
-}
-
-.nav-center .logo a {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #fff;
-  text-decoration: none;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.search-bar input {
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: none;
-  outline: none;
-  font-size: 0.9rem;
-}
-
-.nav-right i {
-  font-size: 18px;
-  color: #fff;
-  cursor: pointer;
-}
-
-.dropdown {
-  position: relative;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
-  background-color: #222;
-  border-radius: 5px;
-  min-width: 120px;
-  z-index: 999;
-}
-
-.dropdown-content a {
-  color: #fff;
-  padding: 10px;
-  display: block;
-  text-decoration: none;
-}
-.dropdown-content a:hover {
-  background-color: #333;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-
 /* Hero Section */
 .hero {
   background: url('assets/banner.jpg') no-repeat center center/cover;
@@ -344,64 +261,6 @@ footer {
   display: none;
 }
 
-/* RESPONSIVE NAVBAR */
-@media (max-width: 768px) {
-  nav.navbar {
-    flex-wrap: wrap;
-    position: relative;
-  }
-
-  .menu-icon {
-    display: block;
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    margin-right: auto;
-  }
-
-  .nav-left ul {
-    display: none;
-    flex-direction: column;
-    background: #111;
-    width: 100%;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    z-index: 999;
-    padding: 1rem 0;
-    text-align: center;
-  }
-
-  nav.active .nav-left ul {
-    display: flex;
-  }
-
-  .nav-center {
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  .nav-right {
-    width: 100%;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-  }
-
-  .search-bar {
-    width: 90%;
-    margin: auto;
-  }
-
-  .search-bar input {
-    width: 100%;
-  }
-}
-
-
-
 /* chat*/
 .chat-button {
   position: fixed;
@@ -490,60 +349,6 @@ footer {
   transform: scale(1.2);
 }
 
-
-/* ============ MOBILE VIEW ============ */
-@media screen and (max-width: 768px) {
-
-  nav ul {
-    flex-direction: column;
-    background: #111;
-    display: none;
-    width: 100%;
-  }
-
-  nav.active ul {
-    display: flex;
-  }
-
-  .menu-icon {
-    display: block; /*only shows on mobile*/
-    cursor: pointer;
-    color: white;
-    font-size: 1.8rem;
-    padding: 1rem;
-  }
-
-  .product-grid {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .about-container {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .about-image img {
-    max-width: 90%;
-    margin: auto;
-  }
-
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .chat-button {
-    bottom: 10px;
-    right: 10px;
-  }
-}
-
-
-.menu-icon {
-  display: none; /* This hides it by default */
-}
-
 /*quicklinks*/
 
 .policy-page {
@@ -598,3 +403,315 @@ html {
 .shop-btn:hover {
   background-color: black;
 }
+
+
+
+
+
+/* ================= NAVBAR BASE ================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  padding: 1rem 1.5rem;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-wrap: wrap;
+}
+
+
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+.nav-links a {
+  text-decoration: none;
+  color: white;
+}
+.nav-links a:hover {
+  color: #ff4081;
+}
+
+.nav-logo a {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-icons i {
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Search Toggle Style */
+.search-wrapper {
+  position: relative;
+}
+.search-input {
+  display: none;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  font-size: 0.9rem;
+}
+.search-wrapper.active .search-input {
+  display: inline-block;
+}
+
+/* Hamburger Menu */
+.menu-toggle {
+  display: none;
+  font-size: 1.6rem;
+  color: white;
+  cursor: pointer;
+}
+
+
+.search-bar {
+  position: relative;
+}
+.search-bar input {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+/* ================= MOBILE NAV ================= */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .logo {
+    flex: 1;
+    text-align: center;
+  }
+
+  .nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    display: none;
+    width: 120px;
+  }
+
+  .nav-icons.show-search .search-input {
+    display: inline-block;
+  }
+
+  /* Hide wishlist on mobile */
+  .wishlist-icon {
+    display: none;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: #111;
+    text-align: center;
+    padding-top: 10px;
+  }
+
+  .navbar.active .nav-links {
+    display: flex;
+  }
+}
+
+
+/* ========== Navbar ========== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111;
+  color: white;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* ☰ Hamburger */
+.menu-toggle {
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+/* Logo in center */
+.logo {
+  flex: 1;
+  text-align: center;
+}
+.logo a {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+/* Right icons */
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Hide search input initially */
+.search-input {
+  display: none;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.nav-icons.show-search .search-input {
+  display: inline-block;
+}
+
+/* On mobile, hide wishlist only */
+@media (max-width: 768px) {
+  .wishlist-icon {
+    display: none;
+  }
+
+  .search-input {
+    width: 120px;
+  }
+}
+
+/* --- Mobile dropdown menu --- */
+.mobile-menu {
+  display: none;
+  background: #111;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.mobile-menu li {
+  padding: 12px 0;
+  border-top: 1px solid #333;
+}
+
+.mobile-menu li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.mobile-menu li a:hover {
+  color: #ff4081;
+}
+
+.mobile-menu.show {
+  display: block;
+}
+
+/* --- Mobile layout fix --- */
+@media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .menu-toggle {
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+  }
+
+  .logo {
+    flex: 1;
+    text-align: center;
+  }
+
+  .nav-icons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .search-input {
+    display: none;
+  }
+
+  .wishlist-icon {
+    display: none; /* hide on mobile */
+  }
+}
+
+/* Base nav link styles (desktop) */
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-links li a:hover {
+  color: #ff4081;
+}
+
+/* Mobile nav toggle */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: #111;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    top: 60px;
+    left: 0;
+  }
+
+  .navbar.show-menu .nav-links {
+    display: flex;
+  }
+
+  .nav-icons {
+    flex-wrap: nowrap;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+
