@@ -340,6 +340,40 @@ footer {
   }
 }
 
+/*mobile style*/
+.menu-icon {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-left ul {
+    display: none;
+    flex-direction: column;
+    background: #111;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  nav.active .nav-left ul {
+    display: flex;
+  }
+
+  .menu-icon {
+    display: block;
+  }
+
+  .nav-right {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
 
 /* chat*/
 .chat-button {
