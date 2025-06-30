@@ -68,54 +68,15 @@
     <p class="footer-bottom">© 2025 REIGN. All rights reserved.</p>
   </footer>
 
-  <!-- Cart Script -->
-  <script>
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const grid = document.getElementById("cart-grid");
-    const summary = document.getElementById("cart-summary");
+      <!-- Load script.js only -->
+    <script src="script.js"></script>
 
-    function renderCart() {
-      grid.innerHTML = "";
-      summary.innerHTML = "";
 
-      if (cart.length === 0) {
-        grid.innerHTML = "<p>Your cart is empty. Please <a href='login.html'>Login</a> to add items.</p>";
-        return;
-      }
+  <!-- Image Modal -->
+    <div id="imgModal" class="modal">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="modalImg">
+    </div>
 
-      let total = 0;
-      cart.forEach((item, index) => {
-        total += parseFloat(item.price);
-        const card = document.createElement("div");
-        card.classList.add("product-card");
-        card.innerHTML = `
-          <img src="${item.img}" alt="${item.name}">
-          <h3>${item.name}</h3>
-          <p>₹${item.price}</p>
-          <button onclick="removeFromCart(${index})" style="background:red; color:white; margin-top:10px;">Remove</button>
-        `;
-        grid.appendChild(card);
-      });
-
-      summary.innerHTML = `
-        <h3>Total: ₹${total}</h3>
-        <button onclick="buyNow()" style="padding:10px 20px; background:green; color:white; border:none; border-radius:5px;">Buy Now</button>
-      `;
-    }
-
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-    }
-
-    function buyNow() {
-      alert("Thank you for your purchase!");
-      localStorage.removeItem("cart");
-      renderCart();
-    }
-
-    renderCart();
-  </script>
 </body>
 </html>

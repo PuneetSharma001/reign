@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Details - REIGN</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- ✅ NAVBAR -->
+  <nav class="navbar">
+    <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+    </ul>
+    <div class="logo"><a href="index.html">REIGN</a></div>
+    <div class="nav-icons">
+      <div class="search-wrapper">
+        <i class="fas fa-search search-toggle" onclick="toggleSearch()"></i>
+        <input type="text" class="search-input" placeholder="Search..." />
+      </div>
+      <a href="wishlist.html" title="Wishlist" class="wishlist-icon"><i class="fas fa-heart"></i></a>
+      <a href="cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+      <a href="login.html" title="Login"><i class="fas fa-user"></i></a>
+    </div>
+  </nav>
+
+  <!-- ✅ PRODUCT DETAIL SECTION -->
+  <section class="product-detail">
+    <div class="product-image">
+      <img id="productImg" src="" alt="Product Image" class="main-img">
+      <div class="thumbnail-row" id="thumbnailRow">
+        <!-- Optional thumbnails -->
+      </div>
+    </div>
+
+    <div class="product-info">
+      <h2 id="productName">Loading...</h2>
+      <p class="product-price">Rs. <span id="productPrice">999</span>.00</p>
+      <p>Taxes Included. Shipping Calculated at Checkout.</p>
+
+      <!-- ✅ Color -->
+      <p><strong>Color:</strong></p>
+      <div class="color-options" id="colorOptions"></div>
+
+      <!-- ✅ Sizes -->
+      <p><strong>Size:</strong></p>
+      <div class="size-options">
+        <button>XS</button><button>S</button><button>M</button>
+        <button>L</button><button>XL</button><button>2XL</button>
+      </div>
+
+      <!-- ✅ Quantity -->
+      <label for="quantity"><strong>Quantity:</strong></label>
+      <div class="quantity-box">
+        <button onclick="changeQty(-1)">-</button>
+        <input type="number" id="quantity" value="1" min="1" />
+        <button onclick="changeQty(1)">+</button>
+      </div>
+
+      <!-- ✅ Buttons -->
+      <button id="addToCartBtn" class="add-to-cart-btn">Add to Cart</button>
+      <button id="wishlistBtn" class="add-to-cart-btn" style="background:#ff4081; margin-left:10px;">
+        <i class="fa fa-heart"></i> Wishlist
+      </button>
+    </div>
+  </section>
+
+  <!-- ✅ SCRIPT -->
+  <script>
+    const products = [
+      { id: 1, name: "REIGN BLACK TEE", price: 999, img: "assets/product1.jpg", color: "Black" },
+      { id: 2, name: "REIGN GREEN TEE", price: 999, img: "assets/product2.jpg", color: "Beige" },
+      { id: 3, name: "REIGN BLACK TEE", price: 999, img: "assets/product3.jpg", color: "Black" },
+      { id: 4, name: "REIGN STREET TEE", price: 999, img: "assets/product4.jpg", color: "White" },
+      { id: 5, name: "REIGN OMBRE TEE", price: 999, img: "assets/product5.jpg", color: "NavyBlue" },
+      { id: 6, name: "REIGN WASHED TEE", price: 999, img: "assets/product6.jpg", color: "Red" },
+      { id: 7, name: "REIGN SAVE TEERS TEE", price: 999, img: "assets/product7.jpg", color: "Black" }
+    ];
+
+    const colorMap = {
+      Black: "black",
+      Beige: "#e0cda9",
+      White: "white",
+      Red: "red",
+      NavyBlue: "#001f3f",
+      Green: "green",
+      Brown: "brown",
+      Grey: "grey"
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    const product = products.find(p => p.id === id);
+
+    if (!product) {
+      alert("Product not found.");
+      throw new Error("Invalid product ID");
+    }
+
+    // Render data
+    document.getElementById("productImg").src = product.img;
+    document.getElementById("productName").innerText = product.name;
+    document.getElementById("productPrice").innerText = product.price;
+
+    // Render color
+    const colorHex = colorMap[product.color] || "gray";
+    document.getElementById("colorOptions").innerHTML = `
+      <div class="color-swatch selected" data-color="${product.color}">
+        <div class="circle" style="background:${colorHex}; ${product.color === 'White' ? 'border:1px solid #ccc' : ''}"></div>
+        <span>${product.color}</span>
+      </div>
+    `;
+
+    // Quantity
+    function changeQty(amount) {
+      const qtyInput = document.getElementById("quantity");
+      let current = parseInt(qtyInput.value) || 1;
+      qtyInput.value = Math.max(1, current + amount);
+    }
+
+    // Cart
+    document.getElementById("addToCartBtn").addEventListener("click", () => {
+      const qty = parseInt(document.getElementById("quantity").value);
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      for (let i = 0; i < qty; i++) cart.push(product);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(`${qty} item(s) added to cart!`);
+    });
+
+    // Wishlist
+    document.getElementById("wishlistBtn").addEventListener("click", () => {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      if (!wishlist.find(p => p.id === product.id)) {
+        wishlist.push(product);
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        alert("Added to wishlist!");
+      } else {
+        alert("Already in wishlist.");
+      }
+    });
+
+    // Navbar
+    function toggleSearch() {
+      document.querySelector(".search-wrapper").classList.toggle("active");
+    }
+    function toggleMenu() {
+      document.querySelector(".navbar").classList.toggle("active");
+    }
+  </script>
+</body>
+</html>
