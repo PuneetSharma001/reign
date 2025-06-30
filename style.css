@@ -70,9 +70,9 @@
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-  padding: 0 1rem;
+  gap: 1.5rem;
+  
+  padding: 1rem;
 }
 
 .product-card {

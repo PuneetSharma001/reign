@@ -78,5 +78,33 @@
       <img class="modal-content" id="modalImg">
     </div>
 
+  <script>
+  const cartGrid = document.getElementById("cart-grid");
+  const cartSummary = document.getElementById("cart-summary");
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  if (cart.length === 0) {
+    cartGrid.innerHTML = "<p style='grid-column: 1/-1;'>Your cart is empty.</p>";
+  } else {
+    let total = 0;
+    cartGrid.innerHTML = cart.map(item => {
+      total += parseInt(item.price);
+      return `
+        <div class="product-card">
+          <img src="${item.img}" alt="${item.name}" />
+          <h3>${item.name}</h3>
+          <p>₹${item.price}</p>
+        </div>
+      `;
+    }).join('');
+
+    cartSummary.innerHTML = `
+      <h3>Total: ₹${total}</h3>
+      <a href="checkout.html" class="shop-btn">Proceed to Checkout</a>
+    `;
+  }
+</script>
+
+
 </body>
 </html>
