@@ -322,3 +322,42 @@ function changeMainImage(thumbnail) {
   document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
   thumbnail.classList.add('active');
 }
+
+//Working Cart Render Function//
+document.addEventListener("DOMContentLoaded", () => {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cartGrid = document.getElementById("cart-grid");
+  const cartSummary = document.getElementById("cart-summary");
+
+  if (!cart.length) {
+    cartGrid.innerHTML = "<p>Your cart is empty.</p>";
+    return;
+  }
+
+  cartGrid.innerHTML = "";
+  let total = 0;
+
+  cart.forEach((product, index) => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+
+    card.innerHTML = `
+      <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')">
+      <h3>${product.name}</h3>
+      <p>₹${product.price}</p>
+      <button onclick="removeFromCart(${index})" style="margin-top: 5px;">Remove</button>
+    `;
+
+    cartGrid.appendChild(card);
+    total += parseFloat(product.price);
+  });
+
+  cartSummary.innerHTML = `<h3>Total: ₹${total}</h3>`;
+});
+
+function removeFromCart(index) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  location.reload(); // re-render cart
+}
