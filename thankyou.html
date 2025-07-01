@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You | REIGN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .thankyou-container {
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 2rem;
+      background: #f9f9f9;
+      border-radius: 12px;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .thankyou-container h1 {
+      color: #ff4081;
+      margin-bottom: 1rem;
+    }
+
+    .thankyou-container p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .thankyou-container ul {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+    }
+
+    .thankyou-container li {
+      padding: 6px 0;
+      font-size: 1rem;
+    }
+
+    .btn-home {
+      display: inline-block;
+      padding: 10px 20px;
+      background: black;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+
+    .btn-home:hover {
+      background: #ff4081;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="thankyou-container">
+    <h1>🎉 Thank You for Your Order!</h1>
+    <p>Your payment was successful.</p>
+    <p><strong>Order ID:</strong> <span id="orderId">Loading...</span></p>
+
+    <div id="orderDetails"></div>
+
+    <a href="index.html" class="btn-home">Return to Home</a>
+  </div>
+
+  <script>
+    const orderId = localStorage.getItem("lastOrderId") || "Unavailable";
+    document.getElementById("orderId").textContent = orderId;
+
+    // Optionally show recent cart summary
+    const recentItems = JSON.parse(localStorage.getItem("lastCart")) || [];
+    const total = recentItems.reduce((sum, item) => sum + parseInt(item.price), 0);
+
+    const orderDetails = document.getElementById("orderDetails");
+
+    if (recentItems.length > 0) {
+      orderDetails.innerHTML = `
+        <h3 style="margin-top: 1rem;">Order Summary:</h3>
+        <ul>
+          ${recentItems.map(i => `<li>${i.name} - ₹${i.price}</li>`).join("")}
+        </ul>
+        <p><strong>Total Paid:</strong> ₹${total}</p>
+      `;
+    }
+  </script>
+</body>
+</html>

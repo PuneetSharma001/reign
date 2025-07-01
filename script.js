@@ -157,19 +157,29 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    currentCart.forEach((item, index) => {
+    currentCart.cart.forEach((item, index) => {
       const div = document.createElement("div");
       div.classList.add("product-card");
+
       div.innerHTML = `
-        <img src="${item.img}" alt="${item.name}" onclick="openModal('${item.img}')" style="cursor:pointer; width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px;">
+        <img src="${item.img}" alt="${item.name}" onclick="openModal('${item.img}')" style="cursor:pointer; max-height: 200px; object-fit: contain; border-radius: 10px;">
         <h3>${item.name}</h3>
-        <p>₹${item.price}</p>
-        <a href="product.html?id=${item.id}" class="view-link" style="color:#007bff; text-decoration:underline;">View Product</a><br>
-        <button onclick="buyNow('${item.name}')" style="margin-top:10px;">Buy Now</button>
+        <p>Price: ₹${product.price}</p>
+        <p><strong>Size:</strong> ${product.size || "N/A"}</p>
+
+
+        <div class="quantity-box" style="justify-content:center; margin:10px 0;">
+          <button onclick="updateCartQty(${item.id}, -1)">-</button>
+          <input type="number" value="1" readonly style="width:50px; text-align:center;">
+          <button onclick="updateCartQty(${item.id}, 1)">+</button>
+        </div>
+
         <button onclick="removeFromCart(${index})" style="background:red; color:white; margin-top:10px;">Remove</button>
       `;
+
       cartGrid.appendChild(div);
     });
+
   }
 });
 
@@ -277,22 +287,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const allProducts = [
     {
       id: "1",
-      name: "REIGN OVERSIZE BLACK TEE",
-      price: "999",
-      img: "assets/product1.jpg"
+    name: "BLACK REBIRTH GOTHIC TEE",
+    price: "799",
+    category: "tshirt",
+    images: [
+      "assets\black rebirth gothic t-Shirt (1).jpg",
+      "assets\black rebirth gothic t-Shirt (2).jpg",
+      "assets\black rebirth gothic t-Shirt (3).jpg",
+      "assets\black rebirth gothic t-Shirt (4).jpg"
+      ]
     },
     {
       id: "2",
-      name: "REIGN OVERSIZE BEIGE TEE",
-      price: "1499",
-      img: "assets/product2.jpg"
+    name: "DONT FEAR DEATH TEE",
+    price: "799",
+    category: "tshirt",
+    images: [
+      "assets\don't fear death back red (1).jpg",
+      "assets\don't fear death back red (2).jpg",
+      "assets\Don't fear death back RED (3).jpg",
+      "assets\don't fear death back red (4).jpg"
+      ]
     },
     {
       id: "3",
-      name: "REIGN OVERSIZE BLACK TEE",
-      price: "999",
-      img: "assets/product3.jpg"
-    }
+    name: "MENACE BEIGE TEE",
+    price: "799",
+    category: "tshirt",
+    images: [
+      "assets\menace beige (1).jpg",
+      "assets\menace beige (2).jpg",
+      "assets\menace beige (3).jpg",
+      "assets/menace beige (4).jpg"
+      ]
+    },
+    {
+      id: "4",
+    name: "SAVE YOUR TEARS TEE",
+    price: "799",
+    category: "tshirt",
+    images: [
+      "assets\save your tears (1).jpg",
+      "assets\save your tears (2).jpg",
+      "assets\save your tears (3).jpg",
+      "assets\save your tears (4).jpg"
+      ]
+    },
   ];
   localStorage.setItem("allProducts", JSON.stringify(allProducts));
 });
@@ -325,39 +365,147 @@ function changeMainImage(thumbnail) {
 
 //Working Cart Render Function//
 document.addEventListener("DOMContentLoaded", () => {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const cartGrid = document.getElementById("cart-grid");
   const cartSummary = document.getElementById("cart-summary");
+  const cartActions = document.getElementById("cart-actions");
+
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
   if (!cart.length) {
     cartGrid.innerHTML = "<p>Your cart is empty.</p>";
+    cartSummary.innerHTML = "";
+    if (cartActions) cartActions.style.display = "none";
     return;
   }
 
+  if (cartActions) cartActions.style.display = "block";
   cartGrid.innerHTML = "";
   let total = 0;
 
-  cart.forEach((product, index) => {
+  const grouped = {};
+  cart.forEach(item => {
+    if (!grouped[item.id]) {
+      grouped[item.id] = { ...item, qty: 1 };
+    } else {
+      grouped[item.id].qty += 1;
+    }
+  });
+
+  Object.values(grouped).forEach(product => {
     const card = document.createElement("div");
     card.classList.add("product-card");
 
+    const subtotal = product.price * product.qty;
+    total += subtotal;
+
     card.innerHTML = `
-      <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')">
+      <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')" style="cursor:pointer; max-height: 200px; object-fit: contain; border-radius: 10px;">
       <h3>${product.name}</h3>
-      <p>₹${product.price}</p>
-      <button onclick="removeFromCart(${index})" style="margin-top: 5px;">Remove</button>
+      <p>Price: ₹${product.price}</p>
+
+      <div class="quantity-box" style="justify-content:center; margin:10px 0;">
+        <button onclick="updateCartQty(${product.id}, -1)">-</button>
+        <input type="number" value="${product.qty}" readonly style="width:50px; text-align:center;">
+        <button onclick="updateCartQty(${product.id}, 1)">+</button>
+      </div>
+
+      <p>Subtotal: ₹${subtotal}</p>
+      <button onclick="removeAllFromCart(${product.id})" style="margin-top:10px; background:red; color:white; border:none; padding:6px 12px; border-radius:4px;">Remove</button>
     `;
 
     cartGrid.appendChild(card);
-    total += parseFloat(product.price);
   });
 
   cartSummary.innerHTML = `<h3>Total: ₹${total}</h3>`;
 });
 
-function removeFromCart(index) {
+// Quantity update
+function updateCartQty(id, change) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart.splice(index, 1);
+
+  if (change > 0) {
+    const product = cart.find(p => p.id == id);
+    if (product) cart.push(product);
+  } else {
+    const index = cart.findIndex(p => p.id == id);
+    if (index !== -1) cart.splice(index, 1);
+  }
+
   localStorage.setItem("cart", JSON.stringify(cart));
-  location.reload(); // re-render cart
+  location.reload();
+}
+
+// Remove all of a product
+function removeAllFromCart(id) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart = cart.filter(p => p.id != id);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  location.reload();
+}
+
+// Clear Cart
+function clearCart() {
+  localStorage.removeItem("cart");
+  location.reload();
+}
+
+//completepayment
+function completePayment() {
+  const card = document.querySelector('input[placeholder="Card Number"]');
+  const name = document.querySelector('input[placeholder="Name on Card"]');
+  const cvv = document.querySelector('input[placeholder="CVV"]');
+  const msg = document.getElementById("checkout-msg");
+
+  if (!card.value || !name.value || !cvv.value) {
+    msg.textContent = "Please fill all payment details.";
+    msg.className = "checkout-message error";
+    msg.style.display = "block";
+    return;
+  }
+
+  if (cvv.value.length < 3 || cvv.value.length > 4 || !/^\d+$/.test(cvv.value)) {
+    msg.textContent = "Please enter a valid CVV.";
+    msg.className = "checkout-message error";
+    msg.style.display = "block";
+    return;
+  }
+
+  msg.textContent = "Payment successful! Thank you for shopping.";
+  msg.className = "checkout-message success";
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    localStorage.removeItem("cart");
+    window.location.href = "index.html";
+  }, 1500);
+}
+
+//save name email during login
+localStorage.setItem("username", "Puneet Sharma");
+localStorage.setItem("email", "puneet@example.com");
+
+
+//razorpay
+function payWithRazorpay() {
+  const btn = document.getElementById("payBtn");
+  btn.disabled = true;
+  btn.textContent = "Processing...";
+
+  const options = {
+    // Razorpay setup...
+    handler: function (response) {
+      localStorage.setItem("lastOrder", JSON.stringify({ cart, total }));
+      localStorage.removeItem("cart");
+      window.location.href = "thankyou.html";
+    },
+    modal: {
+      ondismiss: () => {
+        btn.disabled = false;
+        btn.textContent = "Pay with Razorpay";
+      }
+    }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
 }

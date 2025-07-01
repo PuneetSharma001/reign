@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Orders | REIGN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .order-table {
+      width: 90%;
+      margin: 40px auto;
+      border-collapse: collapse;
+      font-family: 'Poppins', sans-serif;
+    }
+    .order-table th, .order-table td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+    .order-table th {
+      background: #111;
+      color: white;
+    }
+    .order-table td {
+      background: #f9f9f9;
+    }
+  </style>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <h2 style="text-align:center; margin-top:30px;">🛒 REIGN Orders Dashboard</h2>
+  <table class="order-table" id="ordersTable">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Amount</th>
+        <th>Items</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzPmODOiST3HYRme7J4ief9VD7HBvLNZQ",
+      authDomain: "reign-f1070.firebaseapp.com",
+      projectId: "reign-f1070",
+      storageBucket: "reign-f1070.appspot.com",
+      messagingSenderId: "589974886252",
+      appId: "1:589974886252:web:6a566bd69292910d0e0549",
+      measurementId: "G-ZTNDCKWS6F"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const tableBody = document.querySelector("#ordersTable tbody");
+
+    db.collection("orders").orderBy("timestamp", "desc").get().then(snapshot => {
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const row = document.createElement("tr");
+        const date = data.timestamp?.toDate().toLocaleString() || "";
+
+        row.innerHTML = `
+          <td>${data.orderId}</td>
+          <td>${data.customerName}</td>
+          <td>${data.email}</td>
+          <td>${data.phone}</td>
+          <td>₹${data.totalAmount}</td>
+          <td>${data.items.map(i => i.name).join(", ")}</td>
+          <td>${date}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }).catch(err => {
+      alert("Failed to load orders: " + err.message);
+    });
+  </script>
+</body>
+</html>

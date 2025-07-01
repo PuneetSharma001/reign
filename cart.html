@@ -2,109 +2,151 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Cart - REIGN</title>
+  <title>Your Cart | REIGN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
-    <nav class="navbar">
-        <!-- Hamburger (only on mobile) -->
-        <div class="menu-toggle" onclick="toggleMenu()">
-          <i class="fas fa-bars"></i>
-        </div>
+  <!-- ✅ NAVBAR -->
+  <nav class="navbar">
+    <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+    </ul>
+    <div class="logo"><a href="index.html">REIGN</a></div>
+    <div class="nav-icons">
+      <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+      <a href="login.html"><i class="fas fa-user"></i></a>
+    </div>
+  </nav>
 
-        <!-- Left menu links -->
-        <ul class="nav-links">
-          <li><a href="index.html">Home</a></li>
-        </ul>
-
-        <!-- Center logo -->
-        <div class="nav-logo">
-          <a href="index.html">REIGN</a>
-        </div>
-
-        <!-- Right icons -->
-        <div class="nav-icons">
-          <form class="search-bar">
-            <input type="text" placeholder="Search..." />
-          </form>
-          <a href="wishlist.html" title="Wishlist"><i class="fas fa-heart"></i></a>
-          <a href="cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
-          <a href="login.html" title="Login"><i class="fas fa-user"></i></a>
-        </div>
-      </nav>
-  </header>
-
-  <!-- Cart Section -->
-  <section class="products">
+  <section class="products" style="padding:2rem;">
     <h2>Your Cart</h2>
     <div id="cart-grid" class="product-grid"></div>
-    <div id="cart-summary" style="text-align:center; margin-top:20px;"></div>
+    <div id="cart-summary" style="margin-top:20px;"></div>
+
+    <div id="cart-actions" style="margin-top:20px;">
+      <button onclick="clearCart()" class="cart-action-btn">Clear Cart</button>
+      <a href="checkout.html" class="cart-action-btn">Proceed to Checkout</a>
+    </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-content">
-      <div class="footer-section subscribe">
-        <h3>Subscribe to Our Newsletter</h3>
-        <input type="email" placeholder="Enter your email" id="footer-email" />
-        <button onclick="subscribeEmail()">Subscribe</button>
-      </div>
-      <div class="footer-section links">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="contact.html">Contact Information</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="refund.html">Refund Policy</a></li>
-          <li><a href="shipping.html">Shipping Policy</a></li>
-          <li><a href="terms.html">Terms of Service</a></li>
-        </ul>
-      </div>
-    </div>
-    <p class="footer-bottom">© 2025 REIGN. All rights reserved.</p>
-  </footer>
-
-      <!-- Load script.js only -->
-    <script src="script.js"></script>
-
-
-  <!-- Image Modal -->
-    <div id="imgModal" class="modal">
-      <span class="close-modal" onclick="closeModal()">&times;</span>
-      <img class="modal-content" id="modalImg">
-    </div>
+  <!-- ✅ Modal Image Viewer -->
+  <div id="imgModal" class="modal" onclick="closeModal()">
+    <span class="close-modal" onclick="closeModal()">×</span>
+    <img class="modal-content" id="modalImg" />
+  </div>
 
   <script>
-  const cartGrid = document.getElementById("cart-grid");
-  const cartSummary = document.getElementById("cart-summary");
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    // 🧾 Render Cart Items
+    document.addEventListener("DOMContentLoaded", () => {
+      const cartGrid = document.getElementById("cart-grid");
+      const cartSummary = document.getElementById("cart-summary");
+      const cartActions = document.getElementById("cart-actions");
 
-  if (cart.length === 0) {
-    cartGrid.innerHTML = "<p style='grid-column: 1/-1;'>Your cart is empty.</p>";
-  } else {
-    let total = 0;
-    cartGrid.innerHTML = cart.map(item => {
-      total += parseInt(item.price);
-      return `
-        <div class="product-card">
-          <img src="${item.img}" alt="${item.name}" />
-          <h3>${item.name}</h3>
-          <p>₹${item.price}</p>
-        </div>
-      `;
-    }).join('');
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    cartSummary.innerHTML = `
-      <h3>Total: ₹${total}</h3>
-      <a href="checkout.html" class="shop-btn">Proceed to Checkout</a>
-    `;
-  }
-</script>
+      if (!cart.length) {
+        cartGrid.innerHTML = "<p>Your cart is empty.</p>";
+        cartSummary.innerHTML = "";
+        if (cartActions) cartActions.style.display = "none";
+        return;
+      }
 
+      if (cartActions) cartActions.style.display = "block";
+      cartGrid.innerHTML = "";
+      let total = 0;
 
+      const grouped = {};
+      cart.forEach(item => {
+        const key = item.id + "-" + item.size;
+        if (!grouped[key]) {
+          grouped[key] = { ...item, qty: 1 };
+        } else {
+          grouped[key].qty += 1;
+        }
+      });
+
+      Object.values(grouped).forEach(product => {
+        const card = document.createElement("div");
+        card.classList.add("product-card");
+
+        const subtotal = product.price * product.qty;
+        total += subtotal;
+
+        card.innerHTML = `
+          <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')" style="cursor:pointer; max-height: 200px; object-fit: contain; border-radius: 10px;">
+          <h3>${product.name}</h3>
+          <p>Price: ₹${product.price}</p>
+          <p><strong>Size:</strong> ${product.size}</p>
+
+          <div class="quantity-box" style="justify-content:center; margin:10px 0;">
+            <button onclick="updateCartQty('${product.id}','${product.size}', -1)">-</button>
+            <input type="number" value="${product.qty}" readonly style="width:50px; text-align:center;">
+            <button onclick="updateCartQty('${product.id}','${product.size}', 1)">+</button>
+          </div>
+
+          <p>Subtotal: ₹${subtotal}</p>
+          <button onclick="removeAllFromCart('${product.id}','${product.size}')" style="margin-top:10px; background:red; color:white; border:none; padding:6px 12px; border-radius:4px;">Remove</button>
+        `;
+
+        cartGrid.appendChild(card);
+      });
+
+      cartSummary.innerHTML = `<h3>Total: ₹${total}</h3>`;
+    });
+
+    // ➕➖ Update Quantity
+    function updateCartQty(id, size, change) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      const index = cart.findIndex(p => p.id == id && p.size === size);
+
+      if (index !== -1 && change < 0) {
+        cart.splice(index, 1);
+      } else if (change > 0) {
+        const product = cart.find(p => p.id == id && p.size === size);
+        if (product) cart.push(product);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      location.reload();
+    }
+
+    // ❌ Remove All of Same Item & Size
+    function removeAllFromCart(id, size) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart = cart.filter(p => !(p.id == id && p.size === size));
+      localStorage.setItem("cart", JSON.stringify(cart));
+      location.reload();
+    }
+
+    // 🗑 Clear All
+    function clearCart() {
+      localStorage.removeItem("cart");
+      location.reload();
+    }
+
+    // 🔍 Image Modal
+    function openModal(imageSrc) {
+      const modal = document.getElementById("imgModal");
+      const modalImg = document.getElementById("modalImg");
+      modal.style.display = "block";
+      modalImg.src = imageSrc;
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("imgModal");
+      modal.style.display = "none";
+    }
+
+    // 📱 Navbar toggle
+    function toggleMenu() {
+      document.querySelector(".navbar").classList.toggle("active");
+    }
+  </script>
 </body>
 </html>

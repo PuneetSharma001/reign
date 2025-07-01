@@ -3,51 +3,142 @@
 <head>
   <meta charset="UTF-8" />
   <title>Checkout | REIGN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
+
   <div class="checkout-container">
-    <h2>Payment</h2>
-    <p>Total Amount: ₹<span id="total-amount">0</span></p>
-    <input type="text" placeholder="Card Number" required />
-    <input type="text" placeholder="Name on Card" required />
-    <button onclick="completePayment()">Pay Now</button>
+    <h2>Checkout</h2>
+
+    <!-- 🧾 Product Summary -->
+    <div id="checkout-summary" class="checkout-summary"></div>
+
+    <!-- 👤 Contact Info -->
+    <input type="text" id="userName" placeholder="Full Name" required />
+    <input type="email" id="userEmail" placeholder="Email Address" required />
+    <input type="tel" id="userPhone" placeholder="Phone Number" required />
+    <textarea id="userAddress" placeholder="Shipping Address" rows="3" required style="width:100%; padding:10px; border-radius:8px; margin-top:10px; border:1px solid #ccc;"></textarea>
+
+    <!-- 💰 Total Price -->
+    <p style="margin-top: 1rem; font-size: 1.1rem;">
+      <strong>Total Amount:</strong> ₹<span id="total-amount">0</span>
+    </p>
+
+    <!-- 💳 Razorpay Button -->
+    <button id="rzp-button" class="add-to-cart-btn" style="width:100%; margin-top:15px;">Pay with Razorpay</button>
+
+    <!-- ✅ Razorpay Badge -->
+    <p style="text-align: center; margin-top: 1.5rem;">
+      <img src="https://badges.razorpay.com/badge-dark.png" 
+           alt="Powered by Razorpay" 
+           onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/5/59/Razorpay_logo.svg';" 
+           style="height: 32px; object-fit: contain;" />
+    </p>
   </div>
+
+  <!-- 🧠 JS Script -->
   <script>
+    // 🔐 Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzPmODOiST3HYRme7J4ief9VD7HBvLNZQ",
+      authDomain: "reign-f1070.firebaseapp.com",
+      projectId: "reign-f1070",
+      storageBucket: "reign-f1070.appspot.com",
+      messagingSenderId: "589974886252",
+      appId: "1:589974886252:web:6a566bd69292910d0e0549",
+      measurementId: "G-ZTNDCKWS6F"
+    };
+
+    // 🔥 Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // 🛒 Cart & Total
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const total = cart.reduce((sum, item) => sum + parseInt(item.price), 0);
     document.getElementById("total-amount").textContent = total;
 
-    function completePayment() {
-      alert("Payment successful! Thank you for shopping.");
-      localStorage.removeItem("cart");
-      window.location.href = "index.html";
+    // 🧾 Show Summary
+    const summaryDiv = document.getElementById("checkout-summary");
+    if (cart.length) {
+      summaryDiv.innerHTML = `
+        <h4 style="margin-bottom: 10px;">Your Items:</h4>
+        <ul style="list-style: none; padding: 0;">
+          ${cart.map(item => `<li style="margin-bottom: 6px;"><span>${item.name}</span> - ₹${item.price}</li>`).join("")}
+        </ul>
+        <hr style="margin: 10px 0;">
+        <p><strong>Total:</strong> ₹${total}</p>
+      `;
+    } else {
+      summaryDiv.innerHTML = `<p>Your cart is empty.</p>`;
     }
+
+    // 💳 Razorpay Button Click
+    document.getElementById("rzp-button").onclick = function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("userName").value.trim();
+      const email = document.getElementById("userEmail").value.trim();
+      const phone = document.getElementById("userPhone").value.trim();
+      const address = document.getElementById("userAddress").value.trim();
+
+      if (!name || !email || !phone || !address) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      const options = {
+        key: "rzp_test_ZmqWzUt5Li2PHg", // ⚠️ Replace with your test/live key
+        amount: total * 100,
+        currency: "INR",
+        name: "REIGN",
+        description: "Order Payment",
+        image: "https://yourdomain.com/logo.png", // optional
+        handler: function (response) {
+          const orderId = response.razorpay_payment_id;
+
+          // 📝 Save order to Firestore
+          db.collection("orders").add({
+            orderId: orderId,
+            customerName: name,
+            email: email,
+            phone: phone,
+            address: address,
+            items: cart,
+            totalAmount: total,
+            status: "Paid",
+            timestamp: new Date()
+          }).then(() => {
+            localStorage.setItem("lastOrderId", orderId);
+            localStorage.setItem("lastCart", JSON.stringify(cart)); // for thankyou.html
+            localStorage.removeItem("cart");
+            window.location.href = "thankyou.html";
+          }).catch(error => {
+            alert("Order save failed: " + error.message);
+          });
+        },
+        prefill: {
+          name: name,
+          email: email,
+          contact: phone
+        },
+        notes: {
+          address: address
+        },
+        theme: {
+          color: "#ff4081"
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    };
   </script>
-
-  <footer class="site-footer">
-  <div class="footer-content">
-    <div class="footer-section subscribe">
-      <h3>Subscribe to Our Newsletter</h3>
-      <input type="email" placeholder="Enter your email" id="footer-email" />
-      <button onclick="subscribeEmail()">Subscribe</button>
-    </div>
-
-    <div class="footer-section links">
-      <h3>Quick Links</h3>
-      <ul>
-        <li><a href="contact.html">Contact Information</a></li>
-        <li><a href="privacy.html">Privacy Policy</a></li>
-        <li><a href="refund.html">Refund Policy</a></li>
-        <li><a href="shipping.html">Shipping Policy</a></li>
-        <li><a href="terms.html">Terms of Service</a></li>
-
-      </ul>
-    </div>
-  </div>
-
-  <p class="footer-bottom">© 2025 SlickFunky. All rights reserved.</p>
-</footer>
-
 </body>
 </html>
