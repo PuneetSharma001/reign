@@ -70,32 +70,25 @@
         }
       });
 
-      Object.values(grouped).forEach(product => {
-        const card = document.createElement("div");
-        card.classList.add("product-card");
+      Object.values(grouped).forEach((product) => {
+      const card = document.createElement("div");
+      card.classList.add("product-card");
 
-        const subtotal = product.price * product.qty;
-        total += subtotal;
+      const subtotal = product.price * product.qty;
+      total += subtotal;
 
-        card.innerHTML = `
-          <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')" style="cursor:pointer; max-height: 200px; object-fit: contain; border-radius: 10px;">
-          <h3>${product.name}</h3>
-          <p>Price: ₹${product.price}</p>
-          <p><strong>Size:</strong> ${product.size}</p>
-
-          <div class="quantity-box" style="justify-content:center; margin:10px 0;">
-            <button onclick="updateCartQty('${product.id}','${product.size}', -1)">-</button>
-            <input type="number" value="${product.qty}" readonly style="width:50px; text-align:center;">
-            <button onclick="updateCartQty('${product.id}','${product.size}', 1)">+</button>
-          </div>
-
-          <p>Subtotal: ₹${subtotal}</p>
-          <button onclick="removeAllFromCart('${product.id}','${product.size}')" style="margin-top:10px; background:red; color:white; border:none; padding:6px 12px; border-radius:4px;">Remove</button>
-        `;
-
-        cartGrid.appendChild(card);
-      });
-
+      card.innerHTML = `
+        <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')" style="cursor:pointer; max-height: 200px; object-fit: contain;">
+        <h3>${product.name}</h3>
+        <p><strong>Size:</strong> ${product.size || "N/A"}</p>
+        <p><strong>Price:</strong> ₹${product.price}</p>
+        <p><strong>Quantity:</strong> ${product.qty}</p>
+        <p><strong>Subtotal:</strong> ₹${subtotal}</p>
+        <button onclick="removeAllFromCart(${product.id})">Remove All</button>
+      `;
+      cartGrid.appendChild(card);
+    });
+    
       cartSummary.innerHTML = `<h3>Total: ₹${total}</h3>`;
     });
 
