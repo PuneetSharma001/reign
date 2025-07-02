@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -21,16 +22,22 @@
       <i class="fas fa-search search-toggle" onclick="toggleSearch()"></i>
       <input type="text" class="search-input" placeholder="Search..." />
     </div>
-    <a href="wishlist.html" class="wishlist-icon"><i class="fas fa-heart"></i></a>
+    <a href="wishlist.html" class="wishlist-icon" style="position: relative;">
+    <i class="fas fa-heart"></i>
+    <span id="wishlist-count" class="wishlist-badge">0</span>
+    </a>
     <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
     <a href="login.html"><i class="fas fa-user"></i></a>
   </div>
+    <div id="user-section">
+      <a href="profile.html" title="Profile"><i class="fas fa-user"></i></a>
+      </div>
 </nav>
 
 <!-- ✅ PRODUCT DETAIL -->
 <section class="product-detail">
   <div class="product-image">
-    <img id="productImg" class="main-img" src="" alt="Product Image" />
+    <img id="productImg" class="main-img" src="" alt="Product Image" onclick="openModal(this.src)" />
     <div class="thumbnail-row" id="thumbnailRow"></div>
   </div>
 
@@ -69,7 +76,7 @@
   </div>
 </section>
 
-<!-- ✅ IMAGE MODAL -->
+<!-- ✅ IMAGE ZOOM MODAL -->
 <div id="imgModal" class="modal" onclick="closeModal()">
   <span class="close-modal">&times;</span>
   <img class="modal-content" id="modalImg" />
@@ -166,11 +173,11 @@
     thumbnailRow.appendChild(thumb);
   });
 
-  // Text
+  // Text content
   document.getElementById("productName").innerText = product.name;
   document.getElementById("productPrice").innerText = product.price;
 
-  // Color
+  // Color swatch
   const colorHex = colorMap[product.color] || "gray";
   document.getElementById("colorOptions").innerHTML = `
     <div class="color-swatch selected" data-color="${product.color}">
@@ -179,7 +186,7 @@
     </div>
   `;
 
-  // Handle size selection
+  // Size selector
   document.querySelectorAll(".size-options button").forEach(btn => {
     btn.classList.add("size-btn");
     btn.addEventListener("click", () => {
@@ -206,26 +213,38 @@
     }
 
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
     for (let i = 0; i < qty; i++) {
       cart.push({
         id: product.id,
         name: product.name,
         price: product.price,
+        images: product.images,
         img: product.images[0],
         size: selectedSize
       });
     }
-
     localStorage.setItem("cart", JSON.stringify(cart));
     alert(`${qty} item(s) added to cart with size ${selectedSize}`);
   });
 
-  // Wishlist
+  // Add to Wishlist
   document.getElementById("wishlistBtn").addEventListener("click", () => {
+    const selectedSizeBtn = document.querySelector(".size-btn.selected");
+    const selectedSize = selectedSizeBtn ? selectedSizeBtn.innerText : null;
+
     const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-    if (!wishlist.find(p => p.id === product.id)) {
-      wishlist.push(product);
+
+    if (!wishlist.find(p => p.id === product.id && p.size === selectedSize)) {
+      wishlist.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        images: product.images,
+        img: product.images[0],
+        size: selectedSize,
+        color: product.color
+      });
+
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
       alert("Added to wishlist!");
     } else {
@@ -233,13 +252,21 @@
     }
   });
 
-  // Navbar
   function toggleSearch() {
     document.querySelector(".search-wrapper").classList.toggle("active");
   }
+
   function toggleMenu() {
     document.querySelector(".navbar").classList.toggle("active");
   }
+
+  function updateWishlistCount() {
+  const badge = document.getElementById("wishlist-count");
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  if (badge) badge.textContent = wishlist.length > 0 ? wishlist.length : "";
+}
+
+
 </script>
 
 

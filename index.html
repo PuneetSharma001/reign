@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>REIGN</title>
 
@@ -13,6 +12,7 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
 
 </head>
 <body>
@@ -40,9 +40,16 @@
           <i class="fas fa-search search-toggle" onclick="toggleSearch()"></i>
           <input type="text" class="search-input" placeholder="Search..." />
         </div>
-        <a href="wishlist.html" title="Wishlist" class="wishlist-icon"><i class="fas fa-heart"></i></a>
-        <a href="cart.html" title="Cart"><i class="fas fa-shopping-cart"></i></a>
-        <a href="login.html" title="Login"><i class="fas fa-user"></i></a>
+        <a href="wishlist.html" class="wishlist-icon" style="position: relative;">
+        <i class="fas fa-heart"></i>
+        <span id="wishlist-count" class="wishlist-badge">0</span></a>
+        <div id="user-section">
+        <a href="login.html"><i class="fas fa-user"></i></a>
+      </div>
+      <div id="user-section">
+      <a href="profile.html" title="Profile"><i class="fas fa-user"></i></a>
+      </div>
+        
       </div>
     </nav>
 
@@ -183,5 +190,59 @@
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
+
+  <!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB0wht3-9V20iKZAufIEnxyrVoAaV3TxXk",
+    authDomain: "reign-ea368.firebaseapp.com",
+    projectId: "reign-ea368",
+    storageBucket: "reign-ea368.appspot.com",
+    messagingSenderId: "897364911825",
+    appId: "1:897364911825:web:b3172cea98c5be797907f0",
+    measurementId: "G-4E8ENQDDHJ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  const userSection = document.getElementById("user-section");
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      const displayName = user.displayName || "User";
+      userSection.innerHTML = `
+        <div class="user-loggedin" style="color:white; font-size:0.9rem;">
+          👋 Hi, ${displayName.split(" ")[0]} |
+          <a href="#" onclick="logout()" style="color:#ff4081; margin-left:5px;">Logout</a>
+        </div>
+      `;
+    } else {
+      userSection.innerHTML = `<a href="login.html"><i class="fas fa-user"></i></a>`;
+    }
+  });
+
+  function logout() {
+    auth.signOut().then(() => {
+      localStorage.removeItem("username");
+      localStorage.removeItem("email");
+      alert("Logged out!");
+      window.location.href = "index.html";
+    });
+  }
+
+  function updateWishlistCount() {
+    const badge = document.getElementById("wishlist-count");
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    badge.textContent = wishlist.length;
+    badge.style.display = wishlist.length > 0 ? "inline-block" : "none";
+    }
+    updateWishlistCount();
+</script>
+
+  
 </body>
 </html>

@@ -196,9 +196,20 @@ function buyNow(name) {
 // ========== WISHLIST ==========
 function updateWishlistCount() {
   const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-  const icon = document.getElementById("wishlist-count");
-  if (icon) icon.textContent = wishlist.length;
+  const countSpan = document.getElementById("wishlist-count");
+  if (countSpan) {
+    countSpan.textContent = wishlist.length;
+  }
 }
+document.addEventListener("DOMContentLoaded", updateWishlistCount);
+
+function updateWishlistCount() {
+  const badge = document.getElementById("wishlist-count");
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  if (badge) badge.textContent = wishlist.length > 0 ? wishlist.length : "";
+}
+updateWishlistCount();
+
 document.addEventListener('DOMContentLoaded', () => {
   updateWishlistCount();
   document.querySelectorAll('.add-wishlist').forEach(btn => {
@@ -219,8 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
         alert("Already in Wishlist!");
       }
     });
+    
   });
 });
+
 
 // ========== FILTER ==========
 document.addEventListener("DOMContentLoaded", () => {

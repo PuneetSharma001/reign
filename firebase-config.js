@@ -19,3 +19,12 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+function syncWishlistToFirebase() {
+  const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  wishlist.forEach(item => {
+    db.collection("wishlist").doc(String(item.id)).set(item)
+      .then(() => console.log("Wishlist item saved:", item.name))
+      .catch(err => console.error("Error saving wishlist:", err));
+  });
+}

@@ -87,9 +87,11 @@
 
 .product-card img {
   width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  border-radius: 12px;
+  /*max-height: 300px;*/
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  display: block;
   transition: transform 0.4s ease;
 }
 
@@ -246,7 +248,13 @@
   }
 
   .product-card img {
-    max-height: 160px;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .product-card {
+    padding: 10px;
   }
 
   .product-card h3 {
@@ -1195,7 +1203,29 @@
 .razorpay-btn:hover {
   background: #ff4081;
 }
+/*wishlist icon*/
+.wishlist-icon {
+  position: relative;
+}
 
+.wishlist-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 50%;
+  line-height: 1;
+  min-width: 18px;
+  text-align: center;
+}
+
+.wishlist-icon i {
+  color: white; /* or #ff4081 if you want pink */
+}
 
 
 /*cart summary in checkout*/

@@ -5,7 +5,8 @@
   <title>Your Cart | REIGN</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -17,31 +18,103 @@
     </ul>
     <div class="logo"><a href="index.html">REIGN</a></div>
     <div class="nav-icons">
-      <a href="wishlist.html"><i class="fas fa-heart"></i></a>
+      <a href="wishlist.html" class="wishlist-icon" style="position: relative;">
+        <i class="fas fa-heart"></i>
+        <span id="wishlist-count" class="wishlist-badge">0</span>
+      </a>
       <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-      <a href="login.html"><i class="fas fa-user"></i></a>
+      <div id="user-section">
+        <a href="login.html"><i class="fas fa-user"></i></a>
+      </div>
+      <div id="user-section">
+      <a href="profile.html" title="Profile"><i class="fas fa-user"></i></a>
+      </div>
     </div>
   </nav>
 
+  <!-- ✅ MAIN CART CONTENT -->
   <section class="products" style="padding:2rem;">
     <h2>Your Cart</h2>
     <div id="cart-grid" class="product-grid"></div>
     <div id="cart-summary" style="margin-top:20px;"></div>
-
     <div id="cart-actions" style="margin-top:20px;">
       <button onclick="clearCart()" class="cart-action-btn">Clear Cart</button>
       <a href="checkout.html" class="cart-action-btn">Proceed to Checkout</a>
     </div>
   </section>
 
-  <!-- ✅ Modal Image Viewer -->
+  <!-- ✅ IMAGE MODAL -->
   <div id="imgModal" class="modal" onclick="closeModal()">
     <span class="close-modal" onclick="closeModal()">×</span>
     <img class="modal-content" id="modalImg" />
   </div>
 
+  <!-- ✅ FIREBASE AUTH -->
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+
   <script>
-    // 🧾 Render Cart Items
+    const firebaseConfig = {
+      apiKey: "AIzaSyB0wht3-9V20iKZAufIEnxyrVoAaV3TxXk",
+      authDomain: "reign-ea368.firebaseapp.com",
+      projectId: "reign-ea368",
+      storageBucket: "reign-ea368.appspot.com",
+      messagingSenderId: "897364911825",
+      appId: "1:897364911825:web:b3172cea98c5be797907f0",
+      measurementId: "G-4E8ENQDDHJ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const userSection = document.getElementById("user-section");
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const displayName = user.displayName || "User";
+        userSection.innerHTML = `
+          <div class="user-loggedin" style="color:white; font-size:0.9rem;">
+            👋 Hi, ${displayName.split(" ")[0]} |
+            <a href="#" onclick="logout()" style="color:#ff4081; margin-left:5px;">Logout</a>
+          </div>
+        `;
+      } else {
+        userSection.innerHTML = `<a href="login.html"><i class="fas fa-user"></i></a>`;
+      }
+    });
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        localStorage.removeItem("username");
+        localStorage.removeItem("email");
+        alert("Logged out!");
+        window.location.href = "index.html";
+      });
+    }
+
+    // 🔐 Protect page
+    const protectedPages = ["wishlist.html", "cart.html"];
+    const currentPage = window.location.pathname.split("/").pop();
+    if (protectedPages.includes(currentPage)) {
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          alert("Please log in to access this page.");
+          window.location.href = "login.html";
+        }
+      });
+    }
+
+    function updateWishlistCount() {
+    const badge = document.getElementById("wishlist-count");
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    badge.textContent = wishlist.length;
+    badge.style.display = wishlist.length > 0 ? "inline-block" : "none";
+    }
+    updateWishlistCount();
+  </script>
+
+  <!-- ✅ CART SCRIPT -->
+  <script>
     document.addEventListener("DOMContentLoaded", () => {
       const cartGrid = document.getElementById("cart-grid");
       const cartSummary = document.getElementById("cart-summary");
@@ -71,31 +144,29 @@
       });
 
       Object.values(grouped).forEach((product) => {
-      const card = document.createElement("div");
-      card.classList.add("product-card");
+        const card = document.createElement("div");
+        card.classList.add("product-card");
 
-      const subtotal = product.price * product.qty;
-      total += subtotal;
+        const subtotal = product.price * product.qty;
+        total += subtotal;
 
-      card.innerHTML = `
-        <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')" style="cursor:pointer; max-height: 200px; object-fit: contain;">
-        <h3>${product.name}</h3>
-        <p><strong>Size:</strong> ${product.size || "N/A"}</p>
-        <p><strong>Price:</strong> ₹${product.price}</p>
-        <p><strong>Quantity:</strong> ${product.qty}</p>
-        <p><strong>Subtotal:</strong> ₹${subtotal}</p>
-        <button onclick="removeAllFromCart(${product.id})">Remove All</button>
-      `;
-      cartGrid.appendChild(card);
-    });
-    
+        card.innerHTML = `
+          <img src="${product.img}" alt="${product.name}" onclick="openModal('${product.img}')" style="cursor:pointer; max-height: 200px; object-fit: contain;">
+          <h3>${product.name}</h3>
+          <p><strong>Size:</strong> ${product.size || "N/A"}</p>
+          <p><strong>Price:</strong> ₹${product.price}</p>
+          <p><strong>Quantity:</strong> ${product.qty}</p>
+          <p><strong>Subtotal:</strong> ₹${subtotal}</p>
+          <button onclick="removeAllFromCart(${product.id}, '${product.size}')">Remove All</button>
+        `;
+        cartGrid.appendChild(card);
+      });
+
       cartSummary.innerHTML = `<h3>Total: ₹${total}</h3>`;
     });
 
-    // ➕➖ Update Quantity
     function updateCartQty(id, size, change) {
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
       const index = cart.findIndex(p => p.id == id && p.size === size);
 
       if (index !== -1 && change < 0) {
@@ -109,7 +180,6 @@
       location.reload();
     }
 
-    // ❌ Remove All of Same Item & Size
     function removeAllFromCart(id, size) {
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
       cart = cart.filter(p => !(p.id == id && p.size === size));
@@ -117,13 +187,11 @@
       location.reload();
     }
 
-    // 🗑 Clear All
     function clearCart() {
       localStorage.removeItem("cart");
       location.reload();
     }
 
-    // 🔍 Image Modal
     function openModal(imageSrc) {
       const modal = document.getElementById("imgModal");
       const modalImg = document.getElementById("modalImg");
@@ -132,11 +200,9 @@
     }
 
     function closeModal() {
-      const modal = document.getElementById("imgModal");
-      modal.style.display = "none";
+      document.getElementById("imgModal").style.display = "none";
     }
 
-    // 📱 Navbar toggle
     function toggleMenu() {
       document.querySelector(".navbar").classList.toggle("active");
     }
