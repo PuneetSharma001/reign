@@ -193,6 +193,17 @@ function buyNow(name) {
   alert(`Proceeding to buy: ${name}`);
 }
 
+// Protect cart and wishlist pages from unauthenticated access
+const protectedPages = ["cart.html", "wishlist.html"];
+const currentPage = window.location.pathname.split("/").pop();
+
+firebase.auth().onAuthStateChanged(user => {
+  if (!user && protectedPages.includes(currentPage)) {
+    alert("Please log in to access this page.");
+    window.location.href = "login.html";
+  }
+});
+
 // ========== WISHLIST ==========
 function updateWishlistCount() {
   const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];

@@ -807,10 +807,10 @@
   }
 
   /* On mobile, hide wishlist only */
-  @media (max-width: 768px) {
-    .wishlist-icon {
-      display: none;
-    }
+ @media (max-width: 768px) {
+  .wishlist-icon {
+    display: inline-block !important;
+  }
 
     .search-input {
       width: 120px;
@@ -889,8 +889,20 @@
     }
 
     .wishlist-icon {
-      display: none; /* hide on mobile */
-    }
+    position: relative;
+  }
+
+  .wishlist-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+  }
+
   }
 
   /* Base nav link styles (desktop) */
