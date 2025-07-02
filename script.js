@@ -221,6 +221,8 @@ function updateWishlistCount() {
 }
 updateWishlistCount();
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
   updateWishlistCount();
   document.querySelectorAll('.add-wishlist').forEach(btn => {
@@ -533,3 +535,37 @@ function payWithRazorpay() {
   const rzp = new Razorpay(options);
   rzp.open();
 }
+
+
+
+  function toggleUserMenu() {
+    const menu = document.getElementById("userDropdown");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+
+  document.addEventListener("click", function (event) {
+    const dropdown = document.getElementById("userDropdown");
+    if (!event.target.closest(".user-menu")) {
+      dropdown.style.display = "none";
+    }
+  });
+
+  firebase.auth().onAuthStateChanged((user) => {
+    const userSection = document.getElementById("user-section");
+    if (user) {
+      const name = user.displayName || "User";
+      document.getElementById("username").textContent = name.split(" ")[0];
+      userSection.innerHTML = `
+        <div class="user-menu">
+          <i class="fas fa-user-circle" onclick="toggleUserMenu()"></i>
+          <div class="user-dropdown" id="userDropdown">
+            <p>👋 Hi, ${name.split(" ")[0]}</p>
+            <a href="profile.html">Profile</a>
+            <a href="#" onclick="logout()">Logout</a>
+          </div>
+        </div>
+      `;
+    } else {
+      userSection.innerHTML = `<a href="login.html"><i class="fas fa-user"></i></a>`;
+    }
+  });

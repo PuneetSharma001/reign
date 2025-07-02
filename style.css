@@ -1267,3 +1267,37 @@
   max-width: 140px;
   opacity: 0.8;
 }
+
+
+.user-menu {
+  position: relative;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 150%;
+  background: #222;
+  color: white;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  width: 140px;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.user-dropdown a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 6px 0;
+  font-size: 0.9rem;
+}
+
+.user-dropdown a:hover {
+  color: #ff4081;
+}
